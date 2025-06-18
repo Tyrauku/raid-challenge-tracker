@@ -43,130 +43,6 @@
             }
         }
         
-        function generateResults() {
-            const champ1 = document.getElementById('champ1').value || 'Not set';
-            const champ2 = document.getElementById('champ2').value || 'Not set';
-            const champ3 = document.getElementById('champ3').value || 'Not set';
-            const champ4 = document.getElementById('champ4').value || 'Not set';
-            const champ5 = document.getElementById('champ5').value || 'Not set';
-            
-            const totalScore = document.getElementById('total-points').textContent;
-            
-            // Get completed activities
-            const activities = [];
-            
-            // Clan Boss
-            if (document.getElementById('cb-unm').checked) {
-                activities.push('✅ Clan Boss UNM (50pts)');
-            } else if (document.getElementById('cb-nm').checked) {
-                activities.push('✅ Clan Boss NM (35pts)');
-            }
-            
-            // Hydra
-            if (document.getElementById('hydra-nm').checked) {
-                activities.push('✅ Hydra NM (35pts)');
-            } else if (document.getElementById('hydra-brutal').checked) {
-                activities.push('✅ Hydra Brutal (25pts)');
-            }
-            
-            // Arena
-            if (document.getElementById('arena-win').checked) {
-                activities.push('✅ Live Arena Win (20pts)');
-            }
-            
-            // Dungeons
-            const spiderStage = parseInt(document.getElementById('spider-stage').value) || 0;
-            const dragonStage = parseInt(document.getElementById('dragon-stage').value) || 0;
-            const iceStage = parseInt(document.getElementById('ice-stage').value) || 0;
-            const fireStage = parseInt(document.getElementById('fire-stage').value) || 0;
-            
-            if (spiderStage > 0) activities.push(`✅ Spider Stage ${spiderStage} (${spiderStage * 2}pts)`);
-            if (dragonStage > 0) activities.push(`✅ Dragon Stage ${dragonStage} (${dragonStage * 2}pts)`);
-            if (iceStage > 0) activities.push(`✅ Ice Golem Stage ${iceStage} (${iceStage * 2}pts)`);
-            if (fireStage > 0) activities.push(`✅ Fire Knight Stage ${fireStage} (${fireStage * 4}pts)`);
-            
-            // Generate summary
-            const resultText = `🏆 5 LEGENDARY CHAMPIONS CHALLENGE RESULTS 🏆
-
-📊 FINAL SCORE: ${totalScore}/205 POINTS
-
-👥 TEAM COMPOSITION:
-🔸 ${champ1}
-🔸 ${champ2}
-🔸 ${champ3}
-🔸 ${champ4}
-🔸 ${champ5}
-
-📋 COMPLETED CHALLENGES:
-${activities.length > 0 ? activities.join('\n') : '❌ No challenges completed yet'}
-
-💪 Challenge tracker: https://tyrauku.github.io/raid-challenge-tracker/
-
-#RAIDShadowLegends #5LegendaryChallenge`;
-            
-            document.getElementById('results-text').value = resultText;
-            document.getElementById('results-output').style.display = 'block';
-        }
-        
-        function copyResults() {
-            const resultsText = document.getElementById('results-text').textContent;
-            
-            // Try modern clipboard API first
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(resultsText).then(() => {
-                    showCopySuccess();
-                }).catch(() => {
-                    fallbackCopy(resultsText);
-                });
-            } else {
-                // Fallback for mobile and older browsers
-                fallbackCopy(resultsText);
-            }
-        }
-        
-        function copyResults() {
-            const resultsTextArea = document.getElementById('results-text');
-            
-            // Focus and select the textarea
-            resultsTextArea.focus();
-            resultsTextArea.select();
-            
-            try {
-                // Try the copy command
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    // Show success feedback
-                    const copyButton = document.querySelector('button[onclick="copyResults()"]');
-                    const originalText = copyButton.textContent;
-                    copyButton.textContent = 'Copied! ✅';
-                    copyButton.style.background = '#28a745';
-                    
-                    setTimeout(() => {
-                        copyButton.textContent = originalText;
-                        copyButton.style.background = '#137333';
-                    }, 2000);
-                } else {
-                    alert('Copy failed. Please select the text manually and press Ctrl+C');
-                }
-            } catch (err) {
-                alert('Copy failed. Please select the text manually and press Ctrl+C');
-            }
-        }
-        
-        function selectAllText() {
-            const resultsTextArea = document.getElementById('results-text');
-            resultsTextArea.focus();
-            resultsTextArea.select();
-            
-            // Try to copy automatically after selecting
-            try {
-                document.execCommand('copy');
-                alert('Text selected and copied! You can now paste it wherever you need.');
-            } catch (err) {
-                alert('Text selected! Now press Ctrl+C to copy, then paste wherever you need.');
-            }
-        }
-        
         .header {
             background: #1a73e8;
             color: white;
@@ -635,6 +511,114 @@ ${activities.length > 0 ? activities.join('\n') : '❌ No challenges completed y
             } else {
                 totalElement.style.backgroundColor = '#e8f5e8';
                 totalElement.style.color = '#137333';
+            }
+        }
+        
+        function generateResults() {
+            const champ1 = document.getElementById('champ1').value || 'Not set';
+            const champ2 = document.getElementById('champ2').value || 'Not set';
+            const champ3 = document.getElementById('champ3').value || 'Not set';
+            const champ4 = document.getElementById('champ4').value || 'Not set';
+            const champ5 = document.getElementById('champ5').value || 'Not set';
+            
+            const totalScore = document.getElementById('total-points').textContent;
+            
+            // Get completed activities
+            const activities = [];
+            
+            // Clan Boss
+            if (document.getElementById('cb-unm').checked) {
+                activities.push('✅ Clan Boss UNM (50pts)');
+            } else if (document.getElementById('cb-nm').checked) {
+                activities.push('✅ Clan Boss NM (35pts)');
+            }
+            
+            // Hydra
+            if (document.getElementById('hydra-nm').checked) {
+                activities.push('✅ Hydra NM (35pts)');
+            } else if (document.getElementById('hydra-brutal').checked) {
+                activities.push('✅ Hydra Brutal (25pts)');
+            }
+            
+            // Arena
+            if (document.getElementById('arena-win').checked) {
+                activities.push('✅ Live Arena Win (20pts)');
+            }
+            
+            // Dungeons
+            const spiderStage = parseInt(document.getElementById('spider-stage').value) || 0;
+            const dragonStage = parseInt(document.getElementById('dragon-stage').value) || 0;
+            const iceStage = parseInt(document.getElementById('ice-stage').value) || 0;
+            const fireStage = parseInt(document.getElementById('fire-stage').value) || 0;
+            
+            if (spiderStage > 0) activities.push(`✅ Spider Stage ${spiderStage} (${spiderStage * 2}pts)`);
+            if (dragonStage > 0) activities.push(`✅ Dragon Stage ${dragonStage} (${dragonStage * 2}pts)`);
+            if (iceStage > 0) activities.push(`✅ Ice Golem Stage ${iceStage} (${iceStage * 2}pts)`);
+            if (fireStage > 0) activities.push(`✅ Fire Knight Stage ${fireStage} (${fireStage * 4}pts)`);
+            
+            // Generate summary
+            const resultText = `🏆 5 LEGENDARY CHAMPIONS CHALLENGE RESULTS 🏆
+
+📊 FINAL SCORE: ${totalScore}/205 POINTS
+
+👥 TEAM COMPOSITION:
+🔸 ${champ1}
+🔸 ${champ2}
+🔸 ${champ3}
+🔸 ${champ4}
+🔸 ${champ5}
+
+📋 COMPLETED CHALLENGES:
+${activities.length > 0 ? activities.join('\n') : '❌ No challenges completed yet'}
+
+💪 Challenge tracker: https://tyrauku.github.io/raid-challenge-tracker/
+
+#RAIDShadowLegends #5LegendaryChallenge`;
+            
+            document.getElementById('results-text').value = resultText;
+            document.getElementById('results-output').style.display = 'block';
+        }
+        
+        function copyResults() {
+            const resultsTextArea = document.getElementById('results-text');
+            
+            // Focus and select the textarea
+            resultsTextArea.focus();
+            resultsTextArea.select();
+            
+            try {
+                // Try the copy command
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    // Show success feedback
+                    const copyButton = document.querySelector('button[onclick="copyResults()"]');
+                    const originalText = copyButton.textContent;
+                    copyButton.textContent = 'Copied! ✅';
+                    copyButton.style.background = '#28a745';
+                    
+                    setTimeout(() => {
+                        copyButton.textContent = originalText;
+                        copyButton.style.background = '#137333';
+                    }, 2000);
+                } else {
+                    alert('Copy failed. Please select the text manually and press Ctrl+C');
+                }
+            } catch (err) {
+                alert('Copy failed. Please select the text manually and press Ctrl+C');
+            }
+        }
+        
+        function selectAllText() {
+            const resultsTextArea = document.getElementById('results-text');
+            resultsTextArea.focus();
+            resultsTextArea.select();
+            
+            // Try to copy automatically after selecting
+            try {
+                document.execCommand('copy');
+                alert('Text selected and copied! You can now paste it wherever you need.');
+            } catch (err) {
+                alert('Text selected! Now press Ctrl+C to copy, then paste wherever you need.');
             }
         }
     </script>
