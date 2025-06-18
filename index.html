@@ -195,7 +195,7 @@
     <div class="container">
         <div class="header">
             <h1>🏆 5 Legendary Champions Challenge</h1>
-            <p>Team Performance Tracker - Max 267 Points</p>
+            <p>Team Performance Tracker - Max 303 Points</p>
         </div>
         
         <div class="team-section">
@@ -247,8 +247,8 @@
                     Dragon: 2pts per stage<br>
                     Ice Golem: 2pts per stage<br>
                     Fire Knight: 4pts per stage<br>
-                    Sand Devil: 1pt stages 1-19, 2pts stages 20-25<br>
-                    Shogun: 1pt stages 1-19, 2pts stages 20-25
+                    Sand Devil: 1pt stages 1-19, 5pts stages 20-25<br>
+                    Shogun: 1pt stages 1-19, 5pts stages 20-25
                 </div>
             </div>
         </div>
@@ -341,13 +341,13 @@
                         <td>Sand Devil's Necropolis</td>
                         <td>Stage <input type="number" class="stage-input" id="sand-stage" min="0" max="25" value="0" onchange="updateDungeons()"></td>
                         <td><span id="sand-points" class="calculated-points">0</span></td>
-                        <td>31</td>
+                        <td>49</td>
                     </tr>
                     <tr class="area-row">
                         <td>Shogun's Grove</td>
                         <td>Stage <input type="number" class="stage-input" id="shogun-stage" min="0" max="25" value="0" onchange="updateDungeons()"></td>
                         <td><span id="shogun-points" class="calculated-points">0</span></td>
-                        <td>31</td>
+                        <td>49</td>
                     </tr>
                     
                     <!-- Total Section -->
@@ -355,7 +355,7 @@
                         <td><strong>TOTAL SCORE</strong></td>
                         <td></td>
                         <td><span id="total-points" class="calculated-points" style="font-size: 18px;">0</span></td>
-                        <td class="max-points">267</td>
+                        <td class="max-points">303</td>
                     </tr>
                 </tbody>
             </table>
@@ -482,7 +482,7 @@
                 if (sandStage <= 19) {
                     sandPoints = sandStage * 1; // 1 point per stage for 1-19
                 } else {
-                    sandPoints = 19 * 1 + (sandStage - 19) * 2; // 19 points + 2 per stage for 20-25
+                    sandPoints = 19 * 1 + (sandStage - 19) * 5; // 19 points + 5 per stage for 20-25
                 }
             }
             
@@ -492,7 +492,7 @@
                 if (shogunStage <= 19) {
                     shogunPoints = shogunStage * 1; // 1 point per stage for 1-19
                 } else {
-                    shogunPoints = 19 * 1 + (shogunStage - 19) * 2; // 19 points + 2 per stage for 20-25
+                    shogunPoints = 19 * 1 + (shogunStage - 19) * 5; // 19 points + 5 per stage for 20-25
                 }
             }
             
@@ -589,7 +589,7 @@
                 if (sandStage <= 19) {
                     sandDisplayPoints = sandStage * 1;
                 } else {
-                    sandDisplayPoints = 19 * 1 + (sandStage - 19) * 2;
+                    sandDisplayPoints = 19 * 1 + (sandStage - 19) * 5;
                 }
             }
             
@@ -599,7 +599,7 @@
                 if (shogunStage <= 19) {
                     shogunDisplayPoints = shogunStage * 1;
                 } else {
-                    shogunDisplayPoints = 19 * 1 + (shogunStage - 19) * 2;
+                    shogunDisplayPoints = 19 * 1 + (shogunStage - 19) * 5;
                 }
             }
             
@@ -619,7 +619,7 @@
             
             // Display total score
             const totalScore = document.getElementById('total-points').textContent;
-            document.getElementById('score-display').innerHTML = `${totalScore} / 267 Points`;
+            document.getElementById('score-display').innerHTML = `${totalScore} / 303 Points`;
             
             // Show the results box
             document.getElementById('results-display').style.display = 'block';
