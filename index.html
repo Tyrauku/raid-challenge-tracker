@@ -43,6 +43,94 @@
             }
         }
         
+        function generateResults() {
+            const champ1 = document.getElementById('champ1').value || 'Not set';
+            const champ2 = document.getElementById('champ2').value || 'Not set';
+            const champ3 = document.getElementById('champ3').value || 'Not set';
+            const champ4 = document.getElementById('champ4').value || 'Not set';
+            const champ5 = document.getElementById('champ5').value || 'Not set';
+            
+            const totalScore = document.getElementById('total-points').textContent;
+            
+            // Get completed activities
+            const activities = [];
+            
+            // Clan Boss
+            if (document.getElementById('cb-unm').checked) {
+                activities.push('✅ Clan Boss UNM (50pts)');
+            } else if (document.getElementById('cb-nm').checked) {
+                activities.push('✅ Clan Boss NM (35pts)');
+            }
+            
+            // Hydra
+            if (document.getElementById('hydra-nm').checked) {
+                activities.push('✅ Hydra NM (35pts)');
+            } else if (document.getElementById('hydra-brutal').checked) {
+                activities.push('✅ Hydra Brutal (25pts)');
+            }
+            
+            // Arena
+            if (document.getElementById('arena-win').checked) {
+                activities.push('✅ Live Arena Win (20pts)');
+            }
+            
+            // Dungeons
+            const spiderStage = parseInt(document.getElementById('spider-stage').value) || 0;
+            const dragonStage = parseInt(document.getElementById('dragon-stage').value) || 0;
+            const iceStage = parseInt(document.getElementById('ice-stage').value) || 0;
+            const fireStage = parseInt(document.getElementById('fire-stage').value) || 0;
+            
+            if (spiderStage > 0) activities.push(`✅ Spider Stage ${spiderStage} (${spiderStage * 2}pts)`);
+            if (dragonStage > 0) activities.push(`✅ Dragon Stage ${dragonStage} (${dragonStage * 2}pts)`);
+            if (iceStage > 0) activities.push(`✅ Ice Golem Stage ${iceStage} (${iceStage * 2}pts)`);
+            if (fireStage > 0) activities.push(`✅ Fire Knight Stage ${fireStage} (${fireStage * 4}pts)`);
+            
+            // Generate summary
+            const resultText = `🏆 5 LEGENDARY CHAMPIONS CHALLENGE RESULTS 🏆
+
+📊 FINAL SCORE: ${totalScore}/205 POINTS
+
+👥 TEAM COMPOSITION:
+🔸 ${champ1}
+🔸 ${champ2}
+🔸 ${champ3}
+🔸 ${champ4}
+🔸 ${champ5}
+
+📋 COMPLETED CHALLENGES:
+${activities.length > 0 ? activities.join('\n') : '❌ No challenges completed yet'}
+
+💪 Challenge tracker: https://tyrauku.github.io/raid-challenge-tracker/
+
+#RAIDShadowLegends #5LegendaryChallenge`;
+            
+            document.getElementById('results-text').textContent = resultText;
+            document.getElementById('results-output').style.display = 'block';
+        }
+        
+        function copyResults() {
+            const resultsText = document.getElementById('results-text').textContent;
+            navigator.clipboard.writeText(resultsText).then(() => {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Copied! ✅';
+                button.style.background = '#137333';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#137333';
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = resultsText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Results copied to clipboard!');
+            });
+        }
+        
         .header {
             background: #1a73e8;
             color: white;
@@ -345,6 +433,55 @@
                     </tr>
                 </tbody>
             </table>
+            
+            <!-- Save Results Section -->
+            <div style="text-align: center; margin-top: 20px; padding: 20px;">
+                <button onclick="generateResults()" style="
+                    background: #1a73e8; 
+                    color: white; 
+                    border: none; 
+                    padding: 12px 24px; 
+                    border-radius: 6px; 
+                    font-size: 16px; 
+                    font-weight: bold; 
+                    cursor: pointer;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                ">📋 Generate Results Summary</button>
+            </div>
+            
+            <!-- Results Output -->
+            <div id="results-output" style="
+                margin-top: 15px; 
+                padding: 15px; 
+                background: #f8f9fa; 
+                border-radius: 6px; 
+                border-left: 4px solid #1a73e8;
+                display: none;
+            ">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <strong style="color: #1a73e8;">📊 Challenge Results Summary</strong>
+                    <button onclick="copyResults()" style="
+                        background: #137333; 
+                        color: white; 
+                        border: none; 
+                        padding: 6px 12px; 
+                        border-radius: 4px; 
+                        font-size: 12px; 
+                        cursor: pointer;
+                    ">Copy to Clipboard</button>
+                </div>
+                <pre id="results-text" style="
+                    background: white; 
+                    padding: 10px; 
+                    border-radius: 4px; 
+                    margin: 0; 
+                    font-family: monospace; 
+                    font-size: 12px; 
+                    line-height: 1.4;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                "></pre>
+            </div>
         </div>
     </div>
 
