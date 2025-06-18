@@ -22,6 +22,27 @@
             overflow: hidden;
         }
         
+        /* Mobile responsive - full width on small screens */
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            body {
+                padding: 0;
+            }
+            
+            .spreadsheet {
+                padding: 10px;
+            }
+            
+            .team-section, .rules-section {
+                padding: 15px 10px;
+            }
+        }
+        
         .header {
             background: #1a73e8;
             color: white;
