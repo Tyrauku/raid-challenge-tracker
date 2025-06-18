@@ -104,7 +104,7 @@ ${activities.length > 0 ? activities.join('\n') : '❌ No challenges completed y
 
 #RAIDShadowLegends #5LegendaryChallenge`;
             
-            document.getElementById('results-text').textContent = resultText;
+            document.getElementById('results-text').value = resultText;
             document.getElementById('results-output').style.display = 'block';
         }
         
@@ -125,48 +125,46 @@ ${activities.length > 0 ? activities.join('\n') : '❌ No challenges completed y
         }
         
         function copyResults() {
-            const resultsText = document.getElementById('results-text').textContent;
+            const resultsTextArea = document.getElementById('results-text');
             
-            // Create a temporary textarea (works better on mobile)
-            const textArea = document.createElement('textarea');
-            textArea.value = resultsText;
-            textArea.setAttribute('readonly', '');
-            textArea.style.position = 'absolute';
-            textArea.style.left = '-9999px';
-            document.body.appendChild(textArea);
-            
-            // Select the text
-            textArea.select();
-            textArea.setSelectionRange(0, 99999); // For mobile devices
+            // Focus and select the textarea
+            resultsTextArea.focus();
+            resultsTextArea.select();
             
             try {
-                // Try to copy
+                // Try the copy command
                 const successful = document.execCommand('copy');
                 if (successful) {
-                    showCopySuccess();
+                    // Show success feedback
+                    const copyButton = document.querySelector('button[onclick="copyResults()"]');
+                    const originalText = copyButton.textContent;
+                    copyButton.textContent = 'Copied! ✅';
+                    copyButton.style.background = '#28a745';
+                    
+                    setTimeout(() => {
+                        copyButton.textContent = originalText;
+                        copyButton.style.background = '#137333';
+                    }, 2000);
                 } else {
-                    showManualCopy();
+                    alert('Copy failed. Please select the text manually and press Ctrl+C');
                 }
             } catch (err) {
-                showManualCopy();
+                alert('Copy failed. Please select the text manually and press Ctrl+C');
             }
+        }
+        
+        function selectAllText() {
+            const resultsTextArea = document.getElementById('results-text');
+            resultsTextArea.focus();
+            resultsTextArea.select();
             
-            document.body.removeChild(textArea);
-        }
-        
-        function showManualCopy() {
-            alert('Auto-copy not available. Please manually select and copy the text from the gray box below.');
-        }
-        
-        function showCopySuccess() {
-            const button = document.querySelector('#results-output button');
-            const originalText = button.textContent;
-            button.textContent = 'Copied! ✅';
-            button.style.background = '#137333';
-            setTimeout(() => {
-                button.textContent = originalText;
-                button.style.background = '#137333';
-            }, 2000);
+            // Try to copy automatically after selecting
+            try {
+                document.execCommand('copy');
+                alert('Text selected and copied! You can now paste it wherever you need.');
+            } catch (err) {
+                alert('Text selected! Now press Ctrl+C to copy, then paste wherever you need.');
+            }
         }
         
         .header {
@@ -498,27 +496,42 @@ ${activities.length > 0 ? activities.join('\n') : '❌ No challenges completed y
             ">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                     <strong style="color: #1a73e8;">📊 Challenge Results Summary</strong>
-                    <button onclick="copyResults()" style="
-                        background: #137333; 
-                        color: white; 
-                        border: none; 
-                        padding: 6px 12px; 
-                        border-radius: 4px; 
-                        font-size: 12px; 
-                        cursor: pointer;
-                    ">Copy to Clipboard</button>
+                    <div>
+                        <button onclick="copyResults()" style="
+                            background: #137333; 
+                            color: white; 
+                            border: none; 
+                            padding: 6px 12px; 
+                            border-radius: 4px; 
+                            font-size: 12px; 
+                            cursor: pointer;
+                            margin-right: 5px;
+                        ">Copy to Clipboard</button>
+                        <button onclick="selectAllText()" style="
+                            background: #ea4335; 
+                            color: white; 
+                            border: none; 
+                            padding: 6px 12px; 
+                            border-radius: 4px; 
+                            font-size: 12px; 
+                            cursor: pointer;
+                        ">Select All</button>
+                    </div>
                 </div>
-                <pre id="results-text" style="
+                <textarea id="results-text" readonly style="
+                    width: 100%; 
+                    height: 200px;
                     background: white; 
                     padding: 10px; 
+                    border: 1px solid #dadce0;
                     border-radius: 4px; 
                     margin: 0; 
                     font-family: monospace; 
                     font-size: 12px; 
                     line-height: 1.4;
-                    white-space: pre-wrap;
-                    word-wrap: break-word;
-                "></pre>
+                    resize: vertical;
+                    box-sizing: border-box;
+                "></textarea>
             </div>
         </div>
     </div>
