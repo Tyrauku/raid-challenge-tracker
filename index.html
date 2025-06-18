@@ -124,26 +124,38 @@ ${activities.length > 0 ? activities.join('\n') : '❌ No challenges completed y
             }
         }
         
-        function fallbackCopy(text) {
-            // Create a text area and select it
+        function copyResults() {
+            const resultsText = document.getElementById('results-text').textContent;
+            
+            // Create a temporary textarea (works better on mobile)
             const textArea = document.createElement('textarea');
-            textArea.value = text;
-            textArea.style.position = 'fixed';
-            textArea.style.left = '-999999px';
-            textArea.style.top = '-999999px';
+            textArea.value = resultsText;
+            textArea.setAttribute('readonly', '');
+            textArea.style.position = 'absolute';
+            textArea.style.left = '-9999px';
             document.body.appendChild(textArea);
-            textArea.focus();
+            
+            // Select the text
             textArea.select();
+            textArea.setSelectionRange(0, 99999); // For mobile devices
             
             try {
-                document.execCommand('copy');
-                showCopySuccess();
+                // Try to copy
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopySuccess();
+                } else {
+                    showManualCopy();
+                }
             } catch (err) {
-                // If all else fails, show the text for manual copying
-                alert('Copy failed. Please manually copy the text from the box below.');
+                showManualCopy();
             }
             
             document.body.removeChild(textArea);
+        }
+        
+        function showManualCopy() {
+            alert('Auto-copy not available. Please manually select and copy the text from the gray box below.');
         }
         
         function showCopySuccess() {
@@ -561,10 +573,21 @@ ${activities.length > 0 ? activities.join('\n') : '❌ No challenges completed y
         }
         
         function updateDungeons() {
-            const spiderStage = parseInt(document.getElementById('spider-stage').value) || 0;
-            const dragonStage = parseInt(document.getElementById('dragon-stage').value) || 0;
-            const iceStage = parseInt(document.getElementById('ice-stage').value) || 0;
-            const fireStage = parseInt(document.getElementById('fire-stage').value) || 0;
+            // Enforce max stage of 10
+            const spiderInput = document.getElementById('spider-stage');
+            const dragonInput = document.getElementById('dragon-stage');
+            const iceInput = document.getElementById('ice-stage');
+            const fireInput = document.getElementById('fire-stage');
+            
+            if (spiderInput.value > 10) spiderInput.value = 10;
+            if (dragonInput.value > 10) dragonInput.value = 10;
+            if (iceInput.value > 10) iceInput.value = 10;
+            if (fireInput.value > 10) fireInput.value = 10;
+            
+            const spiderStage = parseInt(spiderInput.value) || 0;
+            const dragonStage = parseInt(dragonInput.value) || 0;
+            const iceStage = parseInt(iceInput.value) || 0;
+            const fireStage = parseInt(fireInput.value) || 0;
             
             document.getElementById('spider-points').textContent = spiderStage * 2;
             document.getElementById('dragon-points').textContent = dragonStage * 2;
