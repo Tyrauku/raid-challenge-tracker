@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAID Challenge - 5 Legendary Champions Team</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #1a73e8;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        .header p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .rules-section {
+            background: #f1f3f4;
+            padding: 15px 20px;
+            border-bottom: 1px solid #dadce0;
+        }
+        
+        .rules-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1a73e8;
+            font-size: 16px;
+        }
+        
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            font-size: 13px;
+        }
+        
+        .rule-item {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #1a73e8;
+        }
+        
+        .rule-item strong {
+            color: #1a73e8;
+        }
+        
+        .spreadsheet {
+            overflow-x: auto;
+            padding: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        th, td {
+            border: 1px solid #dadce0;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #3c4043;
+            text-align: center;
+        }
+        
+        .area-header {
+            background-color: #e8f0fe;
+            font-weight: bold;
+            color: #1a73e8;
+            font-size: 15px;
+        }
+        
+        .area-row {
+            background-color: #fafafa;
+        }
+        
+        .total-row {
+            background-color: #e8f5e8;
+            font-weight: bold;
+            border-top: 2px solid #137333;
+        }
+        
+        .max-points {
+            color: #137333;
+            font-weight: bold;
+        }
+        
+        input[type="number"] {
+            width: 80px;
+            padding: 6px 8px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+        
+        .stage-input {
+            width: 60px;
+        }
+        
+        .calculated-points {
+            font-weight: bold;
+            color: #137333;
+            background-color: #e8f5e8;
+            padding: 6px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .team-section {
+            background: #fff3e0;
+            padding: 15px 20px;
+            border-bottom: 1px solid #dadce0;
+        }
+        
+        .team-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 3px;
+            box-sizing: border-box;
+        }
+        
+        .team-input:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 5 Legendary Champions Challenge</h1>
+            <p>Team Performance Tracker - Max 205 Points</p>
+        </div>
+        
+        <div class="team-section">
+            <strong>Team Composition (5 Legendary Champions):</strong>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 10px;">
+                <div>
+                    <label style="font-weight: 600; color: #1a73e8;">Champion 1:</label>
+                    <input type="text" class="team-input" placeholder="Enter champion name..." id="champ1">
+                </div>
+                <div>
+                    <label style="font-weight: 600; color: #1a73e8;">Champion 2:</label>
+                    <input type="text" class="team-input" placeholder="Enter champion name..." id="champ2">
+                </div>
+                <div>
+                    <label style="font-weight: 600; color: #1a73e8;">Champion 3:</label>
+                    <input type="text" class="team-input" placeholder="Enter champion name..." id="champ3">
+                </div>
+                <div>
+                    <label style="font-weight: 600; color: #1a73e8;">Champion 4:</label>
+                    <input type="text" class="team-input" placeholder="Enter champion name..." id="champ4">
+                </div>
+                <div>
+                    <label style="font-weight: 600; color: #1a73e8;">Champion 5:</label>
+                    <input type="text" class="team-input" placeholder="Enter champion name..." id="champ5">
+                </div>
+            </div>
+        </div>
+        
+        <div class="rules-section">
+            <div class="rules-title">📋 Scoring Rules</div>
+            <div class="rules-grid">
+                <div class="rule-item">
+                    <strong>Clan Boss (Max 1)</strong><br>
+                    UNM: 50pts<br>
+                    NM: 35pts
+                </div>
+                <div class="rule-item">
+                    <strong>Hydra (Max 1)</strong><br>
+                    NM: 35pts<br>
+                    Brutal: 25pts
+                </div>
+                <div class="rule-item">
+                    <strong>Live Arena (Max 1)</strong><br>
+                    Win: 20pts
+                </div>
+                <div class="rule-item">
+                    <strong>Dungeons (Stage × Points)</strong><br>
+                    Spider: 2pts per stage<br>
+                    Dragon: 2pts per stage<br>
+                    Ice Golem: 2pts per stage<br>
+                    Fire Knight: 4pts per stage
+                </div>
+            </div>
+        </div>
+        
+        <div class="spreadsheet">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40%;">Challenge Area</th>
+                        <th style="width: 25%;">Achievement</th>
+                        <th style="width: 20%;">Points Earned</th>
+                        <th style="width: 15%;">Max Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Clan Boss Section -->
+                    <tr class="area-header">
+                        <td colspan="4">🛡️ CLAN BOSS (Choose One Only)</td>
+                    </tr>
+                    <tr class="area-row">
+                        <td>Ultra Nightmare</td>
+                        <td><input type="checkbox" id="cb-unm" onchange="updateClanBoss()"> Completed</td>
+                        <td><span id="cb-unm-points" class="calculated-points">0</span></td>
+                        <td>50</td>
+                    </tr>
+                    <tr class="area-row">
+                        <td>Nightmare</td>
+                        <td><input type="checkbox" id="cb-nm" onchange="updateClanBoss()"> Completed</td>
+                        <td><span id="cb-nm-points" class="calculated-points">0</span></td>
+                        <td>35</td>
+                    </tr>
+                    
+                    <!-- Hydra Section -->
+                    <tr class="area-header">
+                        <td colspan="4">🐍 HYDRA (Choose One Only)</td>
+                    </tr>
+                    <tr class="area-row">
+                        <td>Nightmare</td>
+                        <td><input type="checkbox" id="hydra-nm" onchange="updateHydra()"> Completed</td>
+                        <td><span id="hydra-nm-points" class="calculated-points">0</span></td>
+                        <td>35</td>
+                    </tr>
+                    <tr class="area-row">
+                        <td>Brutal</td>
+                        <td><input type="checkbox" id="hydra-brutal" onchange="updateHydra()"> Completed</td>
+                        <td><span id="hydra-brutal-points" class="calculated-points">0</span></td>
+                        <td>25</td>
+                    </tr>
+                    
+                    <!-- Live Arena Section -->
+                    <tr class="area-header">
+                        <td colspan="4">⚔️ LIVE ARENA (Max 1 Win)</td>
+                    </tr>
+                    <tr class="area-row">
+                        <td>Live Arena Victory</td>
+                        <td><input type="checkbox" id="arena-win" onchange="updateArena()"> Won</td>
+                        <td><span id="arena-points" class="calculated-points">0</span></td>
+                        <td>20</td>
+                    </tr>
+                    
+                    <!-- Dungeons Section -->
+                    <tr class="area-header">
+                        <td colspan="4">🏰 DUNGEONS (Stage × Point Multiplier)</td>
+                    </tr>
+                    <tr class="area-row">
+                        <td>Spider's Den</td>
+                        <td>Stage <input type="number" class="stage-input" id="spider-stage" min="0" max="10" value="0" onchange="updateDungeons()"></td>
+                        <td><span id="spider-points" class="calculated-points">0</span></td>
+                        <td>20</td>
+                    </tr>
+                    <tr class="area-row">
+                        <td>Dragon's Lair</td>
+                        <td>Stage <input type="number" class="stage-input" id="dragon-stage" min="0" max="10" value="0" onchange="updateDungeons()"></td>
+                        <td><span id="dragon-points" class="calculated-points">0</span></td>
+                        <td>20</td>
+                    </tr>
+                    <tr class="area-row">
+                        <td>Ice Golem's Peak</td>
+                        <td>Stage <input type="number" class="stage-input" id="ice-stage" min="0" max="10" value="0" onchange="updateDungeons()"></td>
+                        <td><span id="ice-points" class="calculated-points">0</span></td>
+                        <td>20</td>
+                    </tr>
+                    <tr class="area-row">
+                        <td>Fire Knight's Castle</td>
+                        <td>Stage <input type="number" class="stage-input" id="fire-stage" min="0" max="10" value="0" onchange="updateDungeons()"></td>
+                        <td><span id="fire-points" class="calculated-points">0</span></td>
+                        <td>40</td>
+                    </tr>
+                    
+                    <!-- Total Section -->
+                    <tr class="total-row">
+                        <td><strong>TOTAL SCORE</strong></td>
+                        <td></td>
+                        <td><span id="total-points" class="calculated-points" style="font-size: 18px;">0</span></td>
+                        <td class="max-points">205</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function updateClanBoss() {
+            const unmChecked = document.getElementById('cb-unm').checked;
+            const nmChecked = document.getElementById('cb-nm').checked;
+            
+            // Only allow one clan boss completion
+            if (unmChecked) {
+                document.getElementById('cb-nm').checked = false;
+                document.getElementById('cb-unm-points').textContent = '50';
+                document.getElementById('cb-nm-points').textContent = '0';
+            } else if (nmChecked) {
+                document.getElementById('cb-unm').checked = false;
+                document.getElementById('cb-nm-points').textContent = '35';
+                document.getElementById('cb-unm-points').textContent = '0';
+            } else {
+                document.getElementById('cb-unm-points').textContent = '0';
+                document.getElementById('cb-nm-points').textContent = '0';
+            }
+            
+            updateTotal();
+        }
+        
+        function updateHydra() {
+            const nmChecked = document.getElementById('hydra-nm').checked;
+            const brutalChecked = document.getElementById('hydra-brutal').checked;
+            
+            // Only allow one hydra completion
+            if (nmChecked) {
+                document.getElementById('hydra-brutal').checked = false;
+                document.getElementById('hydra-nm-points').textContent = '35';
+                document.getElementById('hydra-brutal-points').textContent = '0';
+            } else if (brutalChecked) {
+                document.getElementById('hydra-nm').checked = false;
+                document.getElementById('hydra-brutal-points').textContent = '25';
+                document.getElementById('hydra-nm-points').textContent = '0';
+            } else {
+                document.getElementById('hydra-nm-points').textContent = '0';
+                document.getElementById('hydra-brutal-points').textContent = '0';
+            }
+            
+            updateTotal();
+        }
+        
+        function updateArena() {
+            const points = document.getElementById('arena-win').checked ? 20 : 0;
+            document.getElementById('arena-points').textContent = points;
+            updateTotal();
+        }
+        
+        function updateDungeons() {
+            const spiderStage = parseInt(document.getElementById('spider-stage').value) || 0;
+            const dragonStage = parseInt(document.getElementById('dragon-stage').value) || 0;
+            const iceStage = parseInt(document.getElementById('ice-stage').value) || 0;
+            const fireStage = parseInt(document.getElementById('fire-stage').value) || 0;
+            
+            document.getElementById('spider-points').textContent = spiderStage * 2;
+            document.getElementById('dragon-points').textContent = dragonStage * 2;
+            document.getElementById('ice-points').textContent = iceStage * 2;
+            document.getElementById('fire-points').textContent = fireStage * 4;
+            
+            updateTotal();
+        }
+        
+        function updateTotal() {
+            const clanBossPoints = parseInt(document.getElementById('cb-unm-points').textContent) + 
+                                 parseInt(document.getElementById('cb-nm-points').textContent);
+            const hydraPoints = parseInt(document.getElementById('hydra-nm-points').textContent) + 
+                              parseInt(document.getElementById('hydra-brutal-points').textContent);
+            const arenaPoints = parseInt(document.getElementById('arena-points').textContent);
+            const dungeonPoints = parseInt(document.getElementById('spider-points').textContent) + 
+                                 parseInt(document.getElementById('dragon-points').textContent) + 
+                                 parseInt(document.getElementById('ice-points').textContent) + 
+                                 parseInt(document.getElementById('fire-points').textContent);
+            
+            const total = clanBossPoints + hydraPoints + arenaPoints + dungeonPoints;
+            document.getElementById('total-points').textContent = total;
+            
+            // Change color based on score
+            const totalElement = document.getElementById('total-points');
+            if (total >= 100) {
+                totalElement.style.backgroundColor = '#d4edda';
+                totalElement.style.color = '#155724';
+            } else if (total >= 50) {
+                totalElement.style.backgroundColor = '#fff3cd';
+                totalElement.style.color = '#856404';
+            } else {
+                totalElement.style.backgroundColor = '#e8f5e8';
+                totalElement.style.color = '#137333';
+            }
+        }
+    </script>
+</body>
+</html>
