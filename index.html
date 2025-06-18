@@ -195,7 +195,7 @@
     <div class="container">
         <div class="header">
             <h1>🏆 5 Legendary Champions Challenge</h1>
-            <p>Team Performance Tracker - Max 205 Points</p>
+            <p>Team Performance Tracker - Max 255 Points</p>
         </div>
         
         <div class="team-section">
@@ -246,7 +246,9 @@
                     Spider: 2pts per stage<br>
                     Dragon: 2pts per stage<br>
                     Ice Golem: 2pts per stage<br>
-                    Fire Knight: 4pts per stage
+                    Fire Knight: 4pts per stage<br>
+                    Sand Devil: 1pt per stage<br>
+                    Shogun: 1pt per stage
                 </div>
             </div>
         </div>
@@ -335,13 +337,25 @@
                         <td><span id="fire-points" class="calculated-points">0</span></td>
                         <td>40</td>
                     </tr>
+                    <tr class="area-row">
+                        <td>Sand Devil's Necropolis</td>
+                        <td>Stage <input type="number" class="stage-input" id="sand-stage" min="0" max="25" value="0" onchange="updateDungeons()"></td>
+                        <td><span id="sand-points" class="calculated-points">0</span></td>
+                        <td>25</td>
+                    </tr>
+                    <tr class="area-row">
+                        <td>Shogun's Grove</td>
+                        <td>Stage <input type="number" class="stage-input" id="shogun-stage" min="0" max="25" value="0" onchange="updateDungeons()"></td>
+                        <td><span id="shogun-points" class="calculated-points">0</span></td>
+                        <td>25</td>
+                    </tr>
                     
                     <!-- Total Section -->
                     <tr class="total-row">
                         <td><strong>TOTAL SCORE</strong></td>
                         <td></td>
                         <td><span id="total-points" class="calculated-points" style="font-size: 18px;">0</span></td>
-                        <td class="max-points">205</td>
+                        <td class="max-points">255</td>
                     </tr>
                 </tbody>
             </table>
@@ -440,26 +454,34 @@
         }
         
         function updateDungeons() {
-            // Enforce max stage of 10
+            // Enforce max stage limits
             const spiderInput = document.getElementById('spider-stage');
             const dragonInput = document.getElementById('dragon-stage');
             const iceInput = document.getElementById('ice-stage');
             const fireInput = document.getElementById('fire-stage');
+            const sandInput = document.getElementById('sand-stage');
+            const shogunInput = document.getElementById('shogun-stage');
             
             if (spiderInput.value > 10) spiderInput.value = 10;
             if (dragonInput.value > 10) dragonInput.value = 10;
             if (iceInput.value > 10) iceInput.value = 10;
             if (fireInput.value > 10) fireInput.value = 10;
+            if (sandInput.value > 25) sandInput.value = 25;
+            if (shogunInput.value > 25) shogunInput.value = 25;
             
             const spiderStage = parseInt(spiderInput.value) || 0;
             const dragonStage = parseInt(dragonInput.value) || 0;
             const iceStage = parseInt(iceInput.value) || 0;
             const fireStage = parseInt(fireInput.value) || 0;
+            const sandStage = parseInt(sandInput.value) || 0;
+            const shogunStage = parseInt(shogunInput.value) || 0;
             
             document.getElementById('spider-points').textContent = spiderStage * 2;
             document.getElementById('dragon-points').textContent = dragonStage * 2;
             document.getElementById('ice-points').textContent = iceStage * 2;
             document.getElementById('fire-points').textContent = fireStage * 4;
+            document.getElementById('sand-points').textContent = sandStage * 1;
+            document.getElementById('shogun-points').textContent = shogunStage * 1;
             
             updateTotal();
         }
@@ -473,7 +495,9 @@
             const dungeonPoints = parseInt(document.getElementById('spider-points').textContent) + 
                                  parseInt(document.getElementById('dragon-points').textContent) + 
                                  parseInt(document.getElementById('ice-points').textContent) + 
-                                 parseInt(document.getElementById('fire-points').textContent);
+                                 parseInt(document.getElementById('fire-points').textContent) +
+                                 parseInt(document.getElementById('sand-points').textContent) +
+                                 parseInt(document.getElementById('shogun-points').textContent);
             
             const total = clanBossPoints + hydraPoints + arenaPoints + dungeonPoints;
             document.getElementById('total-points').textContent = total;
@@ -536,11 +560,15 @@
             const dragonStage = parseInt(document.getElementById('dragon-stage').value) || 0;
             const iceStage = parseInt(document.getElementById('ice-stage').value) || 0;
             const fireStage = parseInt(document.getElementById('fire-stage').value) || 0;
+            const sandStage = parseInt(document.getElementById('sand-stage').value) || 0;
+            const shogunStage = parseInt(document.getElementById('shogun-stage').value) || 0;
             
             if (spiderStage > 0) challenges.push(`✅ Spider's Den - Stage ${spiderStage} (${spiderStage * 2} points)`);
             if (dragonStage > 0) challenges.push(`✅ Dragon's Lair - Stage ${dragonStage} (${dragonStage * 2} points)`);
             if (iceStage > 0) challenges.push(`✅ Ice Golem's Peak - Stage ${iceStage} (${iceStage * 2} points)`);
             if (fireStage > 0) challenges.push(`✅ Fire Knight's Castle - Stage ${fireStage} (${fireStage * 4} points)`);
+            if (sandStage > 0) challenges.push(`✅ Sand Devil's Necropolis - Stage ${sandStage} (${sandStage * 1} points)`);
+            if (shogunStage > 0) challenges.push(`✅ Shogun's Grove - Stage ${shogunStage} (${shogunStage * 1} points)`);
             
             // Display challenges
             if (challenges.length > 0) {
@@ -551,7 +579,7 @@
             
             // Display total score
             const totalScore = document.getElementById('total-points').textContent;
-            document.getElementById('score-display').innerHTML = `${totalScore} / 205 Points`;
+            document.getElementById('score-display').innerHTML = `${totalScore} / 255 Points`;
             
             // Show the results box
             document.getElementById('results-display').style.display = 'block';
