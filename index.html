@@ -348,7 +348,7 @@
             
             <!-- Save Results Section -->
             <div style="text-align: center; margin-top: 20px; padding: 20px;">
-                <button onclick="generateResults()" style="
+                <button onclick="showResults()" style="
                     background: #1a73e8; 
                     color: white; 
                     border: none; 
@@ -358,56 +358,34 @@
                     font-weight: bold; 
                     cursor: pointer;
                     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                ">📋 Generate Results Summary</button>
+                ">📋 Show Results Summary</button>
             </div>
             
-            <!-- Results Output -->
-            <div id="results-output" style="
+            <!-- Results Display Box -->
+            <div id="results-display" style="
                 margin-top: 15px; 
-                padding: 15px; 
+                padding: 20px; 
                 background: #f8f9fa; 
-                border-radius: 6px; 
+                border-radius: 8px; 
                 border-left: 4px solid #1a73e8;
                 display: none;
             ">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <strong style="color: #1a73e8;">📊 Challenge Results Summary</strong>
-                    <div>
-                        <button onclick="copyResults()" style="
-                            background: #137333; 
-                            color: white; 
-                            border: none; 
-                            padding: 6px 12px; 
-                            border-radius: 4px; 
-                            font-size: 12px; 
-                            cursor: pointer;
-                            margin-right: 5px;
-                        ">Copy to Clipboard</button>
-                        <button onclick="selectAllText()" style="
-                            background: #ea4335; 
-                            color: white; 
-                            border: none; 
-                            padding: 6px 12px; 
-                            border-radius: 4px; 
-                            font-size: 12px; 
-                            cursor: pointer;
-                        ">Select All</button>
-                    </div>
+                <h3 style="margin: 0 0 15px 0; color: #1a73e8;">🏆 Challenge Results Summary</h3>
+                
+                <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                    <h4 style="margin: 0 0 10px 0; color: #333;">👥 Team Composition</h4>
+                    <div id="team-display" style="color: #666; line-height: 1.5;"></div>
                 </div>
-                <textarea id="results-text" readonly style="
-                    width: 100%; 
-                    height: 200px;
-                    background: white; 
-                    padding: 10px; 
-                    border: 1px solid #dadce0;
-                    border-radius: 4px; 
-                    margin: 0; 
-                    font-family: monospace; 
-                    font-size: 12px; 
-                    line-height: 1.4;
-                    resize: vertical;
-                    box-sizing: border-box;
-                "></textarea>
+                
+                <div style="background: white; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+                    <h4 style="margin: 0 0 10px 0; color: #333;">📋 Completed Challenges</h4>
+                    <div id="challenges-display" style="color: #666; line-height: 1.8;"></div>
+                </div>
+                
+                <div style="background: #e8f5e8; padding: 15px; border-radius: 6px; text-align: center;">
+                    <h4 style="margin: 0 0 5px 0; color: #333;">📊 Final Score</h4>
+                    <div id="score-display" style="font-size: 24px; font-weight: bold; color: #137333;"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -514,35 +492,43 @@
             }
         }
         
-        function generateResults() {
-            const champ1 = document.getElementById('champ1').value || 'Not set';
-            const champ2 = document.getElementById('champ2').value || 'Not set';
-            const champ3 = document.getElementById('champ3').value || 'Not set';
-            const champ4 = document.getElementById('champ4').value || 'Not set';
-            const champ5 = document.getElementById('champ5').value || 'Not set';
+        function showResults() {
+            // Get champion names
+            const champ1 = document.getElementById('champ1').value || 'Not entered';
+            const champ2 = document.getElementById('champ2').value || 'Not entered';
+            const champ3 = document.getElementById('champ3').value || 'Not entered';
+            const champ4 = document.getElementById('champ4').value || 'Not entered';
+            const champ5 = document.getElementById('champ5').value || 'Not entered';
             
-            const totalScore = document.getElementById('total-points').textContent;
+            // Display team
+            document.getElementById('team-display').innerHTML = `
+                🔸 Champion 1: ${champ1}<br>
+                🔸 Champion 2: ${champ2}<br>
+                🔸 Champion 3: ${champ3}<br>
+                🔸 Champion 4: ${champ4}<br>
+                🔸 Champion 5: ${champ5}
+            `;
             
-            // Get completed activities
-            const activities = [];
+            // Get completed challenges
+            const challenges = [];
             
             // Clan Boss
             if (document.getElementById('cb-unm').checked) {
-                activities.push('✅ Clan Boss UNM (50pts)');
+                challenges.push('✅ Clan Boss - Ultra Nightmare (50 points)');
             } else if (document.getElementById('cb-nm').checked) {
-                activities.push('✅ Clan Boss NM (35pts)');
+                challenges.push('✅ Clan Boss - Nightmare (35 points)');
             }
             
             // Hydra
             if (document.getElementById('hydra-nm').checked) {
-                activities.push('✅ Hydra NM (35pts)');
+                challenges.push('✅ Hydra - Nightmare (35 points)');
             } else if (document.getElementById('hydra-brutal').checked) {
-                activities.push('✅ Hydra Brutal (25pts)');
+                challenges.push('✅ Hydra - Brutal (25 points)');
             }
             
             // Arena
             if (document.getElementById('arena-win').checked) {
-                activities.push('✅ Live Arena Win (20pts)');
+                challenges.push('✅ Live Arena - Victory (20 points)');
             }
             
             // Dungeons
@@ -551,75 +537,24 @@
             const iceStage = parseInt(document.getElementById('ice-stage').value) || 0;
             const fireStage = parseInt(document.getElementById('fire-stage').value) || 0;
             
-            if (spiderStage > 0) activities.push(`✅ Spider Stage ${spiderStage} (${spiderStage * 2}pts)`);
-            if (dragonStage > 0) activities.push(`✅ Dragon Stage ${dragonStage} (${dragonStage * 2}pts)`);
-            if (iceStage > 0) activities.push(`✅ Ice Golem Stage ${iceStage} (${iceStage * 2}pts)`);
-            if (fireStage > 0) activities.push(`✅ Fire Knight Stage ${fireStage} (${fireStage * 4}pts)`);
+            if (spiderStage > 0) challenges.push(`✅ Spider's Den - Stage ${spiderStage} (${spiderStage * 2} points)`);
+            if (dragonStage > 0) challenges.push(`✅ Dragon's Lair - Stage ${dragonStage} (${dragonStage * 2} points)`);
+            if (iceStage > 0) challenges.push(`✅ Ice Golem's Peak - Stage ${iceStage} (${iceStage * 2} points)`);
+            if (fireStage > 0) challenges.push(`✅ Fire Knight's Castle - Stage ${fireStage} (${fireStage * 4} points)`);
             
-            // Generate summary
-            const resultText = `🏆 5 LEGENDARY CHAMPIONS CHALLENGE RESULTS 🏆
-
-📊 FINAL SCORE: ${totalScore}/205 POINTS
-
-👥 TEAM COMPOSITION:
-🔸 ${champ1}
-🔸 ${champ2}
-🔸 ${champ3}
-🔸 ${champ4}
-🔸 ${champ5}
-
-📋 COMPLETED CHALLENGES:
-${activities.length > 0 ? activities.join('\n') : '❌ No challenges completed yet'}
-
-💪 Challenge tracker: https://tyrauku.github.io/raid-challenge-tracker/
-
-#RAIDShadowLegends #5LegendaryChallenge`;
-            
-            document.getElementById('results-text').value = resultText;
-            document.getElementById('results-output').style.display = 'block';
-        }
-        
-        function copyResults() {
-            const resultsTextArea = document.getElementById('results-text');
-            
-            // Focus and select the textarea
-            resultsTextArea.focus();
-            resultsTextArea.select();
-            
-            try {
-                // Try the copy command
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    // Show success feedback
-                    const copyButton = document.querySelector('button[onclick="copyResults()"]');
-                    const originalText = copyButton.textContent;
-                    copyButton.textContent = 'Copied! ✅';
-                    copyButton.style.background = '#28a745';
-                    
-                    setTimeout(() => {
-                        copyButton.textContent = originalText;
-                        copyButton.style.background = '#137333';
-                    }, 2000);
-                } else {
-                    alert('Copy failed. Please select the text manually and press Ctrl+C');
-                }
-            } catch (err) {
-                alert('Copy failed. Please select the text manually and press Ctrl+C');
+            // Display challenges
+            if (challenges.length > 0) {
+                document.getElementById('challenges-display').innerHTML = challenges.join('<br>');
+            } else {
+                document.getElementById('challenges-display').innerHTML = '❌ No challenges completed yet';
             }
-        }
-        
-        function selectAllText() {
-            const resultsTextArea = document.getElementById('results-text');
-            resultsTextArea.focus();
-            resultsTextArea.select();
             
-            // Try to copy automatically after selecting
-            try {
-                document.execCommand('copy');
-                alert('Text selected and copied! You can now paste it wherever you need.');
-            } catch (err) {
-                alert('Text selected! Now press Ctrl+C to copy, then paste wherever you need.');
-            }
+            // Display total score
+            const totalScore = document.getElementById('total-points').textContent;
+            document.getElementById('score-display').innerHTML = `${totalScore} / 205 Points`;
+            
+            // Show the results box
+            document.getElementById('results-display').style.display = 'block';
         }
     </script>
 </body>
